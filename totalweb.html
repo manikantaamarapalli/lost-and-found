@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost and Found System</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            display: none;
+        }
+
+        .visible {
+            display: block;
+        }
+
+        /* Sidebar Styles */
+        #sidebar {
+            width: 250px;
+            background-color: #4CAF50;
+            color: white;
+            position: fixed;
+            left: -250px;
+            height: 100%;
+            transition: 0.3s;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #sidebar.open {
+            left: 0;
+        }
+
+        #sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #sidebar ul li {
+            padding: 20px;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        #sidebar ul li:hover {
+            background-color: #45a049;
+        }
+
+        #sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        /* Page Content Styles */
+        .page {
+            display: none;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 60px;
+        }
+
+        .page.visible {
+            display: block;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .form-submit {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-submit:hover {
+            background-color: #45a049;
+        }
+
+        /* Background Images */
+        #signupPage, #loginPage, #dashboard, #lostForm, #foundForm, #feedback, #suggestions, #profile {
+            background-image: url('https://source.unsplash.com/1600x900/?nature,landscape');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .background-overlay {
+            background-color: rgba(0, 0, 0, 0.4);
+            height: 100%;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .input-box textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: none;
+        }
+
+        /* Button Styles */
+        .menu-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 30px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 15px;
+        }
+
+        .profile-option {
+            margin-top: 20px;
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .profile-option button {
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .profile-option button:hover {
+            background-color: #45a049;
+        }
+
+        .profile-option img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px;
+        }
+
+        /* Star Rating Styles */
+        .star-rating {
+            display: inline-block;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            font-size: 30px;
+            color: #ccc;
+            cursor: pointer;
+        }
+
+        .star-rating input:checked ~ label {
+            color: #f39c12;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #f39c12;
+        }
+
+        /* Google Sign-In Button Styles */
+        .google-signin-btn {
+            background-color: #4285F4;
+            color: white;
+            padding: 12px;
+            border-radius: 5px;
+            width: 100%;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .google-signin-btn:hover {
+            background-color: #357AE8;
+        }
+
+        /* Chat Styles */
+        #chat {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        #chat.visible {
+            display: flex;
+        }
+
+        #chat-header {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        #chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        #chat-input input {
+            width: 80%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        #chat-input button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #chat-input button:hover {
+            background-color: #45a049;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Menu -->
+    <button class="menu-btn" onclick="toggleSidebar()">☰ Menu</button>
+    <div id="sidebar">
+        <ul>
+            <li onclick="navigate('dashboard')">Dashboard</li>
+            <li onclick="navigate('lostForm')">Lost Item Form</li>
+            <li onclick="navigate('foundForm')">Found Item Form</li>
+            <li onclick="navigate('feedback')">Feedback</li>
+            <li onclick="navigate('profile')">Profile</li>
+            <li onclick="navigate('suggestions')">Suggestions</li>
+            <!-- New Chat Menu Item -->
+            <li onclick="toggleChat()">Chat</li>
+        </ul>
+    </div>
+
+    <!-- Signup Page -->
+    <div class="content visible" id="signupPage">
+        <div class="background-overlay">
+            <h1>Sign Up</h1>
+            <form id="signup-form">
+                <input type="text" class="form-input" placeholder="Full Name" required><br><br>
+                <input type="text" class="form-input" placeholder="College ID" required><br><br>
+                <input type="text" class="form-input" placeholder="Year of Study" required><br><br>
+                <input type="email" class="form-input" placeholder="Email" required><br><br>
+                <input type="password" class="form-input" placeholder="Password" required><br><br>
+                <button type="submit" class="form-submit">Sign Up</button>
+            </form>
+            <br><br>
+            <!-- Continue with Google button -->
+            <button class="google-signin-btn" onclick="continueWithGoogle()">Continue with Google</button>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div class="content" id="loginPage">
+        <div class="background-overlay">
+            <h1>Login</h1>
+            <form id="login-form">
+                <input type="email" class="form-input" placeholder="Email" required><br><br>
+                <input type="password" class="form-input" placeholder="Password" required><br><br>
+                <button type="submit" class="form-submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="content page" id="dashboard">
+        <div class="background-overlay">
+            <h1>Dashboard</h1>
+            <div id="lostItemsList"></div>
+        </div>
+    </div>
+
+    <!-- Lost Form -->
+    <div class="content page" id="lostForm">
+        <div class="background-overlay">
+            <h1>Lost Item Form</h1>
+            <form id="lost-item-form">
+                <input type="text" class="form-input" placeholder="Name" id="lostName" required><br><br>
+                <input type="text" class="form-input" placeholder="College ID" id="lostID" required><br><br>
+                <input type="text" class="form-input" placeholder="Year of Study" id="lostYear" required><br><br>
+                <input type="text" class="form-input" placeholder="Item Description" id="lostDescription" required><br><br>
+                <input type="file" class="form-input" id="lostFile" required><br><br>
+                <button type="submit" class="form-submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Found Form -->
+    <div class="content page" id="foundForm">
+        <div class="background-overlay">
+            <h1>Found Item Form</h1>
+            <form id="found-item-form">
+                <input type="text" class="form-input" placeholder="Name" id="foundName" required><br><br>
+                <input type="text" class="form-input" placeholder="College ID" id="foundID" required><br><br>
+                <input type="text" class="form-input" placeholder="Year of Study" id="foundYear" required><br><br>
+                <input type="text" class="form-input" placeholder="Item Description" id="foundDescription" required><br><br>
+                <input type="file" class="form-input" id="foundFile" required><br><br>
+                <button type="submit" class="form-submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Feedback -->
+    <div class="content page" id="feedback">
+        <div class="background-overlay">
+            <h1>Feedback</h1>
+            <div class="star-rating">
+                <input type="radio" id="5-stars" name="rating" value="5">
+                <label for="5-stars">★</label>
+                <input type="radio" id="4-stars" name="rating" value="4">
+                <label for="4-stars">★</label>
+                <input type="radio" id="3-stars" name="rating" value="3">
+                <label for="3-stars">★</label>
+                <input type="radio" id="2-stars" name="rating" value="2">
+                <label for="2-stars">★</label>
+                <input type="radio" id="1-star" name="rating" value="1">
+                <label for="1-star">★</label>
+            </div>
+            <button class="form-submit">Submit Feedback</button>
+        </div>
+    </div>
+
+    <!-- Profile -->
+    <div class="content page" id="profile">
+        <div class="background-overlay">
+            <h1>Profile</h1>
+            <div class="profile-option">
+                <img id="profileImage" src="https://via.placeholder.com/150" alt="Profile Picture">
+                <br>
+                <input type="file" id="uploadProfileImage" class="form-input" onchange="updateProfileImage()">
+                <br><br>
+                <button onclick="changePassword()">Change Password</button>
+                <button onclick="logout()">Log Out</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suggestions -->
+    <div class="content page" id="suggestions">
+        <div class="background-overlay">
+            <h1>Suggestions</h1>
+            <textarea class="form-input" rows="5" placeholder="Your Suggestions"></textarea><br><br>
+            <button class="form-submit">Submit</button>
+        </div>
+    </div>
+
+    <!-- Chat Box -->
+    <div id="chat">
+        <div id="chat-header">Chat</div>
+        <div id="chat-messages"></div>
+        <div id="chat-input">
+            <input type="text" placeholder="Type your message..." id="chatMessage">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        let users = [];
+        let currentUser = null;
+        let lostItems = [];
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function navigate(page) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.content');
+            pages.forEach(page => page.classList.remove('visible'));
+
+            // Show the selected page
+            document.getElementById(page).classList.add('visible');
+        }
+
+        // Sign Up
+        document.getElementById('signup-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const name = e.target[0].value;
+            const id = e.target[1].value;
+            const year = e.target[2].value;
+            const email = e.target[3].value;
+            const password = e.target[4].value;
+
+            users.push({ name, id, year, email, password });
+            alert('Sign Up Successful!');
+            navigate('dashboard');
+        });
+
+        // Google Sign-In (Placeholder)
+        function continueWithGoogle() {
+            alert("Google Sign-In is under construction!");
+        }
+
+        // Lost Item Form
+        document.getElementById('lost-item-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const name = e.target[0].value;
+            const collegeId = e.target[1].value;
+            const year = e.target[2].value;
+            const description = e.target[3].value;
+            const file = e.target[4].files[0];
+
+            const item = {
+                name,
+                collegeId,
+                year,
+                description,
+                file
+            };
+
+            lostItems.push(item);
+            alert("Lost item submitted!");
+
+            // Add item to Dashboard
+            displayLostItems();
+        });
+
+        function displayLostItems() {
+            const lostItemsList = document.getElementById('lostItemsList');
+            lostItemsList.innerHTML = '';
+
+            lostItems.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('item');
+                itemElement.innerHTML = `
+                    <h3>${item.name}</h3>
+                    <p>${item.collegeId}, Year: ${item.year}</p>
+                    <p>${item.description}</p>
+                    <img src="${URL.createObjectURL(item.file)}" alt="Lost Item Image" style="width:100px;">
+                `;
+                lostItemsList.appendChild(itemElement);
+            });
+        }
+
+        // Chat Functionality
+        function toggleChat() {
+            const chatBox = document.getElementById('chat');
+            chatBox.classList.toggle('visible');
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('chatMessage');
+            const messageText = messageInput.value;
+            if (messageText) {
+                const messageElement = document.createElement('p');
+                messageElement.textContent = messageText;
+                document.getElementById('chat-messages').appendChild(messageElement);
+                messageInput.value = '';
+            }
+        }
+    </script>
+</body>
+</html>
