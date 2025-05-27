@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost & Found Dashboard</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #2c3e50;
+            color: white;
+            padding-top: 20px;
+            position: fixed;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            color: white;
+            font-size: 1.8em;
+            margin-bottom: 30px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px;
+            text-decoration: none;
+            font-size: 1.2em;
+            margin: 10px 0;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #34495e;
+        }
+
+        .sidebar a.active {
+            background-color: #2980b9;
+        }
+
+        /* Main Content Area */
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .content h1 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        /* Tab Styles */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .tabs div {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            background-color: #ecf0f1;
+            border-radius: 5px 5px 0 0;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .tabs div:hover {
+            background-color: #ddd;
+        }
+
+        .tabs .active-tab {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            display: none;
+        }
+
+        .dashboard-content.active {
+            display: block;
+        }
+
+        .card {
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .card p {
+            color: #7f8c8d;
+        }
+
+        /* Leaderboard Section */
+        .leaderboard {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .leaderboard table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard th,
+        .leaderboard td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .leaderboard th {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        .leaderboard tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Hidden sections for other menu options */
+        .lost-items,
+        .found-items,
+        .profile-card,
+        .about-section {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar">
+        <h2>Menu bar</h2>
+        <a href="dashboard.html" class="active" data-target="dashboard">Dashboard</a>
+        <a href="lost-forms.html" data-target="lost-items">Lost Forms</a>
+        <a href="found-forms.html" data-target="found-items">Found Forms</a>
+        <a href="profile.html" data-target="profile-card">Profile</a>
+        <a href="leaderboard.html" data-target="leaderboard">Leaderboard</a>
+        <a href="about.html" data-target="about-section">About</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <h1>Dashboard - Lost Items Updates</h1>
+
+        <!-- Lost Items Updates Tabs -->
+        <div class="tabs">
+            <div class="tab active-tab" data-target="total-lost-items">Total Lost Items</div>
+            <div class="tab" data-target="pending-review">Lost Items Pending Review</div>
+            <div class="tab" data-target="recently-added">Lost Items Recently Added</div>
+            <div class="tab" data-target="claimed">Lost Items Claimed</div>
+        </div>
+
+        <!-- Dashboard Content (Tabs) -->
+        <div class="dashboard-content total-lost-items active">
+            <div class="card">
+                <h3>Total Lost Items</h3>
+                <p>10 Items Reported</p>
+            </div>
+        </div>
+
+        <div class="dashboard-content pending-review">
+            <div class="card">
+                <h3>Lost Items Pending Review</h3>
+                <p>3 Items Pending Review</p>
+            </div>
+        </div>
+
+        <div class="dashboard-content recently-added">
+            <div class="card">
+                <h3>Lost Items Recently Added</h3>
+                <p>5 New Items Added This Week</p>
+            </div>
+        </div>
+
+        <div class="dashboard-content claimed">
+            <div class="card">
+                <h3>Lost Items Claimed</h3>
+                <p>2 Items Claimed Recently</p>
+            </div>
+        </div>
+
+        <!-- Leaderboard Section -->
+        <div class="leaderboard">
+            <h2>Leaderboard</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Items Found</th>
+                        <th>Items Lost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>John Doe</td>
+                        <td>15</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Jane Smith</td>
+                        <td>12</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Tom Brown</td>
+                        <td>10</td>
+                        <td>7</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Lost Items Section -->
+        <div class="lost-items">
+            <h2>Lost Forms</h2>
+            <p>Here you can manage all your lost forms.</p>
+        </div>
+
+        <!-- Found Items Section -->
+        <div class="found-items">
+            <h2>Found Forms</h2>
+            <p>Here you can manage all found forms.</p>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="profile-card">
+            <h3>Your Profile</h3>
+            <p><strong>Name:</strong> John Doe</p>
+            <p><strong>Email:</strong> johndoe@example.com</p>
+            <p><strong>Member Since:</strong> January 2023</p>
+            <button>Edit Profile</button>
+        </div>
+
+        <!-- About Section -->
+        <div class="about-section">
+            <h2>About</h2>
+            <p>This platform is designed to help users track and manage lost and found items efficiently.</p>
+            <p>For further assistance, contact us at <strong>support@lostfound.com</strong>.</p>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality for Dashboard
+        const tabs = document.querySelectorAll('.tabs .tab');
+        const contents = document.querySelectorAll('.dashboard-content');
+        const sidebarItems = document.querySelectorAll('.sidebar a');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active-tab'));
+                tab.classList.add('active-tab');
+                contents.forEach(content => content.classList.remove('active'));
+                const targetContent = document.querySelector(`.${tab.getAttribute('data-target')}`);
+                targetContent.classList.add('active');
+            });
+        });
+
+        // Sidebar navigation
+        sidebarItems.forEach(item => {
+            item.addEventListener('click', () => {
+                sidebarItems.forEach(menu => menu.classList.remove('active'));
+                item.classList.add('active');
+                document.querySelectorAll('.content > div').forEach(section => section.style.display = 'none');
+                const targetSection = document.querySelector(`.${item.getAttribute('data-target')}`);
+                if (targetSection) targetSection.style.display = 'block';
+            });
+        });
+    </script>
+
+</body>
+</html>
