@@ -44,13 +44,11 @@ body {
   background-color:#9efa8c;
 }
 .image{
-	background-size:cover;
-	float:left;
-	padding-left:80px;
-	padding-top:20px;
-	height:auto;
-	width:auto;
-	opacity: 0.5;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto; /* center on small screens */
+  opacity: 0.9; /* adjust as needed */
 }
 .footer{
 	position:relative;
