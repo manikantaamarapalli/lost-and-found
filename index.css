@@ -44,6 +44,7 @@ body {
   background-color:#9efa8c;
 }
 .image{
+	background-size:cover;
 	float:left;
 	padding-left:80px;
 	padding-top:20px;
