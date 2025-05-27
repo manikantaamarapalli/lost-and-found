@@ -1,64 +1,187 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>lost form fill up</title>
-	<style>
-		*{
-			box-sizing: border-box;
-		}
-		body {
-			font-family: Arial, sans-serif;
-		}
-		label {
-			display: inline-block;
-			width: 150px;
-			font-weight: bold;
-			margin-bottom:20px;	
-		}
-		
-		#form {
-			background-color: skyblue;
-			border: 1px dashed blue;
-			width: 500px;
-			margin: 50px auto;
-			padding: 20px;
-			box-sizing: border-box;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost Item Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: #555;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-group textarea {
+            resize: vertical;
+        }
+        .form-group input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .form-group input[type="file"] {
+            padding: 5px;
+        }
+        .form-group .error {
+            color: red;
+            font-size: 12px;
+        }
+    </style>
 </head>
 <body>
-	<div id="form">
-	<center><h1>Lost form</h1></center>
-	<form action="/mani.php" method="get">
-		<label for="name">Name:</label>
-		<input type="text" name="name" placeholder="enter your name" required><br>
-		<label for="email">E-mail:</label>
-		<input type="email" name="email" placeholder="enter your E-mail" required><br>
-		<label for="password" >Password:</label>
-		<input type="password" name="password" placeholder="enter your password" title="all numbers only" required><br>
-		<label  for="dateofbirth" >DOB:</label>
-		<input type="Date" name="DOB" placeholder="enter your date of birth" required><br>
-		<label for="gender">Gender</label>
-		male<input type="radio" name="gender">female<input type="radio" name="gender"><br>
-		<label for="branch">Branch:</label>
-		<select name="branch" required>
-			<option>cse</option>
-			<option>ece</option>
-			<option>mec</option>
-			<option>civil</option>
-			<option>eee</option>
-			<option>chem</option>
-			<option>mme</option>
-		</select><br>
-		<label for="description">Description of lost item:</label>
-		<textarea name="description" rows="5" cols="45" required></textarea><br>
-		<label for="file">upload photo of your lost item</label>
-		<input type="file" accept="image/*" name="f" required><br>
-		<center><input type="submit" name="submit"></center><br>
 
+<div class="container">
+    <h2>Lost Item Report</h2>
+    <form id="lost-item-form" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="item-name">Item Name</label>
+            <input type="text" id="item-name" name="item-name" placeholder="Enter the item name" required>
+            <div class="error" id="item-name-error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="item-category">Category</label>
+            <select id="item-category" name="item-category" required>
+                <option value="">Select Category</option>
+                <option value="electronics">Electronics</option>
+                <option value="clothing">Clothing</option>
+                <option value="documents">Documents</option>
+                <option value="accessories">Accessories</option>
+                <option value="other">Other</option>
+            </select>
+            <div class="error" id="item-category-error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="lost-location">Lost Location</label>
+            <input type="text" id="lost-location" name="lost-location" placeholder="Where did you lose the item?" required>
+            <div class="error" id="lost-location-error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="lost-date">Date Lost</label>
+            <input type="date" id="lost-date" name="lost-date" required>
+            <div class="error" id="lost-date-error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="contact-name">Your Name</label>
+            <input type="text" id="contact-name" name="contact-name" placeholder="Enter your full name" required>
+            <div class="error" id="contact-name-error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="contact-email">Your Email</label>
+            <input type="email" id="contact-email" name="contact-email" placeholder="Enter your email" required>
+            <div class="error" id="contact-email-error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="contact-phone">Your Phone Number</label>
+            <input type="tel" id="contact-phone" name="contact-phone" placeholder="Enter your phone number" required>
+            <div class="error" id="contact-phone-error"></div>
+        </div>
+
+        <!-- Description is now required -->
+        <div class="form-group">
+            <label for="item-description">Description of Item (Required)</label>
+            <textarea id="item-description" name="item-description" rows="4" placeholder="Provide a detailed description of the lost item" required></textarea>
+            <div class="error" id="item-description-error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="item-image">Upload Image (Optional)</label>
+            <input type="file" id="item-image" name="item-image" accept="image/*">
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Submit Report">
+        </div>
     </form>
-    </div>
+</div>
+
+<script>
+    // Basic form validation script
+    document.getElementById('lost-item-form').addEventListener('submit', function(event) {
+        let formIsValid = true;
+
+        // Clear previous errors
+        document.querySelectorAll('.error').forEach(function(el) {
+            el.textContent = '';
+        });
+
+        // Check each required field
+        if (!document.getElementById('item-name').value) {
+            document.getElementById('item-name-error').textContent = 'Item name is required.';
+            formIsValid = false;
+        }
+        if (!document.getElementById('item-category').value) {
+            document.getElementById('item-category-error').textContent = 'Category is required.';
+            formIsValid = false;
+        }
+        if (!document.getElementById('lost-location').value) {
+            document.getElementById('lost-location-error').textContent = 'Location is required.';
+            formIsValid = false;
+        }
+        if (!document.getElementById('lost-date').value) {
+            document.getElementById('lost-date-error').textContent = 'Date is required.';
+            formIsValid = false;
+        }
+        if (!document.getElementById('contact-name').value) {
+            document.getElementById('contact-name-error').textContent = 'Your name is required.';
+            formIsValid = false;
+        }
+        if (!document.getElementById('contact-email').value) {
+            document.getElementById('contact-email-error').textContent = 'Your email is required.';
+            formIsValid = false;
+        }
+        if (!document.getElementById('contact-phone').value) {
+            document.getElementById('contact-phone-error').textContent = 'Your phone number is required.';
+            formIsValid = false;
+        }
+        // Check if description is provided
+        if (!document.getElementById('item-description').value) {
+            document.getElementById('item-description-error').textContent = 'Item description is required.';
+            formIsValid = false;
+        }
+
+        if (!formIsValid) {
+            event.preventDefault();
+        }
+    });
+</script>
+
 </body>
 </html>
